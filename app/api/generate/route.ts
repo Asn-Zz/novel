@@ -4,7 +4,8 @@ import { kv } from "@vercel/kv";
 import { Ratelimit } from "@upstash/ratelimit";
 
 const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+  basePath: "https://ai.fakeopen.com/v1",
+  apiKey: "pk--vQ_3TSlbrqiX7QSwoM1XVOW7d6JKLrPVpPPV53ho0s" || process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(config);
 
@@ -12,7 +13,7 @@ export const runtime = "edge";
 
 export async function POST(req: Request): Promise<Response> {
   // Check if the OPENAI_API_KEY is set, if not return 400
-  if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === "") {
+  if (!config.apiKey) {
     return new Response(
       "Missing OPENAI_API_KEY – make sure to add it to your .env file.",
       {
